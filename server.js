@@ -31,17 +31,28 @@ app.use(
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 
+// Root Route
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "ChatApp Backend API is running 🚀",
+  });
+});
+
+// Health Check
 app.get("/api/health", (req, res) => {
-  res.json({
+  res.status(200).json({
     success: true,
     message: "Server is running",
   });
 });
 
+// API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/messages", messageRoutes);
 
+// Error Handling
 app.use(notFound);
 app.use(errorHandler);
 
@@ -50,10 +61,10 @@ const startServer = async () => {
     await connectDB();
 
     server.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
+      console.log(`🚀 Server running on port ${PORT}`);
     });
   } catch (err) {
-    console.error(err);
+    console.error("❌ Failed to start server:", err);
     process.exit(1);
   }
 };
