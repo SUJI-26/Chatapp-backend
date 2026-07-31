@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Password is required"],
       minlength: [6, "Password must be at least 6 characters"],
-      select: false, // never return password by default
+      select: false,
     },
     avatar: {
       type: String,
@@ -41,12 +41,14 @@ const userSchema = new mongoose.Schema(
       default: Date.now,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-// Indexes for fast lookups & search
-userSchema.index({ email: 1 });
+// Text index for searching users by name
 userSchema.index({ name: "text" });
 
 const User = mongoose.model("User", userSchema);
+
 export default User;
